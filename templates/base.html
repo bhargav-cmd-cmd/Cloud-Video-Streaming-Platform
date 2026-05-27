@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VidiStream - Cloud Video Platform{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom Style Sheet -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('main.home') }}">
+                <i class="fa-solid fa-play-circle me-2 gradient-text" style="font-size: 1.8rem;"></i>
+                <span class="gradient-text fw-extrabold">VidiStream</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{{ url_for('main.home') }}">Home</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/dashboard' %}active{% endif %}" href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/upload' %}active{% endif %}" href="{{ url_for('video.upload') }}">Upload</a>
+                        </li>
+                        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                            <div class="dropdown">
+                                <button class="btn btn-premium-outline dropdown-toggle py-1 px-3 d-flex align-items-center" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-user-circle me-2"></i>{{ current_user.username }}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark border-secondary mt-2" aria-labelledby="userMenu">
+                                    <li><a class="dropdown-item" href="{{ url_for('main.dashboard') }}"><i class="fa-solid fa-chart-line me-2"></i>My Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('video.upload') }}"><i class="fa-solid fa-upload me-2"></i>Upload Video</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}"><i class="fa-solid fa-sign-out-alt me-2"></i>Logout</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ms-lg-2">
+                            <a class="nav-link {% if request.path == '/login' %}active{% endif %}" href="{{ url_for('auth.login') }}">Login</a>
+                        </li>
+                        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                            <a class="btn btn-premium py-2 px-4" href="{{ url_for('auth.register') }}">Get Started</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content and Flash Messages -->
+    <div class="container my-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show glass-panel text-white border-{{ category }} shadow" role="alert">
+                                <div class="d-flex align-items-center">
+                                    {% if category == 'success' %}
+                                        <i class="fa-solid fa-circle-check me-2 text-success" style="font-size: 1.25rem;"></i>
+                                    {% elif category == 'danger' or category == 'error' %}
+                                        <i class="fa-solid fa-triangle-exclamation me-2 text-danger" style="font-size: 1.25rem;"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-circle-info me-2 text-info" style="font-size: 1.25rem;"></i>
+                                    {% endif %}
+                                    <div>{{ message }}</div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-4">
+        <div class="container text-center">
+            <p class="mb-2">&copy; 2026 <span class="gradient-text fw-bold">VidiStream</span>. All rights reserved.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#" class="text-secondary text-decoration-none"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-secondary text-decoration-none"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-secondary text-decoration-none"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Script File -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}VidiStream - Stream and Share Videos{% endblock %}
+
+{% block content %}
+<!-- Hero Header Section -->
+<div class="hero-section text-center mb-5">
+    <div class="hero-glow"></div>
+    <div class="row justify-content-center position-relative" style="z-index: 1;">
+        <div class="col-lg-8">
+            <h1 class="display-4 fw-extrabold mb-3">Explore and Stream <span class="gradient-text">Unlimited Videos</span></h1>
+            <p class="lead text-secondary mb-4">Discover creator content, stream seamlessly in high quality, or upload and share your own videos with the world.</p>
+            
+            <!-- Dynamic Search bar -->
+            <div class="search-container">
+                <form action="{{ url_for('main.home') }}" method="GET">
+                    <div class="search-input-group shadow-lg">
+                        <i class="fa-solid fa-magnifying-glass text-secondary ms-3" style="font-size: 1.1rem;"></i>
+                        <input type="text" id="home-search" name="q" value="{{ search_query or '' }}" placeholder="Search videos by title or description..." autocomplete="off">
+                        {% if search_query %}
+                            <a href="{{ url_for('main.home') }}" class="btn btn-dark btn-sm rounded-circle me-1 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; background: rgba(255,255,255,0.1);"><i class="fa-solid fa-times text-white"></i></a>
+                        {% endif %}
+                        <button type="submit" class="btn btn-premium px-4">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Videos Grid -->
+<div class="mb-5">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h3 class="fw-bold">
+            {% if search_query %}
+                Search Results for "<span class="gradient-text">{{ search_query }}</span>"
+            {% else %}
+                Latest Uploads
+            {% endif %}
+        </h3>
+        {% if videos %}
+            <span class="text-secondary small">{{ videos|length }} video{% if videos|length > 1 %}s{% endif %} found</span>
+        {% endif %}
+    </div>
+
+    {% if videos %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="videos-grid">
+            {% for video in videos %}
+                <div class="col video-card-col">
+                    <div class="video-card glass-panel h-100">
+                        <a href="{{ url_for('video.watch', video_id=video.id) }}">
+                            <div class="card-thumbnail-container">
+                                {% if video.thumbnail_filename %}
+                                    <img src="{{ url_for('video.serve_thumbnail', filename=video.thumbnail_filename) }}" alt="{{ video.title }}" loading="lazy">
+                                {% else %}
+                                    <div class="thumbnail-placeholder">
+                                        <i class="fa-solid fa-play thumbnail-placeholder-icon"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="video-duration"><i class="fa-solid fa-clock me-1"></i>Video</div>
+                            </div>
+                        </a>
+                        <div class="card-body-custom">
+                            <a href="{{ url_for('video.watch', video_id=video.id) }}" class="video-title-link">
+                                {{ video.title }}
+                            </a>
+                            <div class="video-uploader d-flex align-items-center">
+                                <i class="fa-solid fa-user me-1" style="font-size: 0.8rem;"></i>
+                                <span>Uploaded by {{ video.uploader.username }}</span>
+                            </div>
+                            <div class="video-meta">
+                                <span><i class="fa-solid fa-eye me-1"></i>{{ video.views }} views</span>
+                                <span><i class="fa-solid fa-calendar-day me-1"></i>{{ video.upload_date.strftime('%b %d, %Y') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row justify-content-center my-5">
+            <div class="col-md-6 text-center py-5 glass-panel">
+                <i class="fa-solid fa-video-slash gradient-text mb-3" style="font-size: 3.5rem;"></i>
+                <h4 class="fw-bold">No videos found</h4>
+                <p class="text-secondary">Be the first to upload a video or refine your search query!</p>
+                <a href="{{ url_for('video.upload') }}" class="btn btn-premium mt-3"><i class="fa-solid fa-upload me-2"></i>Upload Video</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

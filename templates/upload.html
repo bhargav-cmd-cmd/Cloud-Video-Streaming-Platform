@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Video - VidiStream{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="glass-panel p-4 p-md-5">
+            <div class="d-flex align-items-center mb-4">
+                <div class="btn btn-premium p-0 me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; border-radius: 12px; pointer-events: none;">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h2 class="fw-bold mb-0">Upload Video</h2>
+                    <p class="text-secondary mb-0">Share your videos with the community. Max file size: 100MB.</p>
+                </div>
+            </div>
+
+            <form id="upload-form" action="{{ url_for('video.upload') }}" method="POST" enctype="multipart/form-data">
+                <!-- Video File Dropzone -->
+                <div class="mb-4">
+                    <label class="form-label form-label-custom">Video File</label>
+                    <div id="upload-dropzone" class="upload-dropzone">
+                        <i class="fa-solid fa-file-video upload-dropzone-icon"></i>
+                        <h5 class="fw-bold">Drag and drop your video file here</h5>
+                        <p class="text-secondary mb-0">or click to browse from your device</p>
+                        <p class="small text-secondary mt-2">Supported formats: MP4, WebM, OGG, MOV, MKV</p>
+                        <div id="file-info-text" class="upload-file-info font-monospace text-info fw-semibold"></div>
+                    </div>
+                    <!-- Hidden File Input -->
+                    <input type="file" id="video-file" name="video" accept="video/*" class="d-none" required>
+                </div>
+
+                <!-- Title Input -->
+                <div class="mb-3">
+                    <label for="title" class="form-label form-label-custom">Video Title</label>
+                    <input type="text" class="form-control form-control-custom" id="title" name="title" placeholder="Give your video a catchy title" required>
+                </div>
+
+                <!-- Description Input -->
+                <div class="mb-3">
+                    <label for="description" class="form-label form-label-custom">Description</label>
+                    <textarea class="form-control form-control-custom" id="description" name="description" rows="4" placeholder="Tell viewers what your video is about..."></textarea>
+                </div>
+
+                <!-- Optional Thumbnail Input -->
+                <div class="mb-4">
+                    <label for="thumbnail" class="form-label form-label-custom">Custom Thumbnail (Optional)</label>
+                    <input type="file" class="form-control form-control-custom" id="thumbnail" name="thumbnail" accept="image/*">
+                    <div class="form-text text-secondary">If no thumbnail is uploaded, we'll try to extract a frame from your video automatically!</div>
+                </div>
+
+                <!-- Progress Bar Section -->
+                <div id="progress-container" class="progress-container">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-info fw-semibold"><i class="fa-solid fa-spinner fa-spin me-2"></i>Uploading...</span>
+                        <span id="progress-percent" class="text-info fw-semibold">0%</span>
+                    </div>
+                    <div class="progress-bar-custom shadow-inner">
+                        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                    </div>
+                    <p class="small text-secondary mt-2">Please do not close this tab or navigate away until the upload is completed.</p>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-end gap-3 mt-4">
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-premium-outline py-2 px-4">Cancel</a>
+                    <button type="submit" id="btn-publish" class="btn btn-premium py-2 px-5"><i class="fa-solid fa-paper-plane me-2"></i>Publish Video</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
