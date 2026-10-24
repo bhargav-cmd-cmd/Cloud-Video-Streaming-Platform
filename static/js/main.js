@@ -26,23 +26,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // Highlight dropzone on dragover
         dropzone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropzone.style.borderColor = '#8B5CF6';
-            dropzone.style.backgroundColor = 'rgba(139, 92, 246, 0.08)';
+            dropzone.classList.add('is-dragging');
         });
 
         // Reset highlights
         ['dragleave', 'dragend'].forEach(type => {
             dropzone.addEventListener(type, () => {
-                dropzone.style.borderColor = 'rgba(139, 92, 246, 0.4)';
-                dropzone.style.backgroundColor = 'rgba(139, 92, 246, 0.03)';
+                dropzone.classList.remove('is-dragging');
             });
         });
 
         // Handle drop event
         dropzone.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropzone.style.borderColor = 'rgba(139, 92, 246, 0.4)';
-            dropzone.style.backgroundColor = 'rgba(139, 92, 246, 0.03)';
+            dropzone.classList.remove('is-dragging');
 
             if (e.dataTransfer.files.length) {
                 fileInput.files = e.dataTransfer.files;

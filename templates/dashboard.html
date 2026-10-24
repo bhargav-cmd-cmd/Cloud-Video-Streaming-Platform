@@ -6,7 +6,7 @@
 <div class="d-flex flex-wrap align-items-center justify-content-between mb-5 gap-3">
     <div>
         <h1 class="fw-bold mb-1">Creator Dashboard</h1>
-        <p class="text-secondary mb-0">Manage your channel, analyze views, and edit your uploads.</p>
+        <p class="text-secondary mb-0">Your uploads and viewing activity, in one place.</p>
     </div>
     <div>
         <a href="{{ url_for('video.upload') }}" class="btn btn-premium px-4"><i class="fa-solid fa-upload me-2"></i>Upload New Video</a>
@@ -116,7 +116,7 @@
         <div class="glass-panel text-center py-5">
             <i class="fa-solid fa-video-slash gradient-text mb-3" style="font-size: 3.5rem;"></i>
             <h4 class="fw-bold">No uploads yet</h4>
-            <p class="text-secondary mb-4">Start sharing your content today and build your audience!</p>
+            <p class="text-secondary mb-4">Your uploaded videos will appear here.</p>
             <a href="{{ url_for('video.upload') }}" class="btn btn-premium"><i class="fa-solid fa-upload me-2"></i>Upload First Video</a>
         </div>
     {% endif %}
