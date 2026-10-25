@@ -12,7 +12,7 @@ def create_app():
     app = Flask(__name__)
     
     # Configuration
-    app.config['SECRET_KEY'] = 'dev_secret_key_cloud_video_platform_987654321'
+    app.config['SECRET_KEY'] = 'dev_secret_key_vidistream_platform_987654321'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
